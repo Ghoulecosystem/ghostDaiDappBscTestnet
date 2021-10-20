@@ -8,7 +8,7 @@
       <div class="row ">
         <div class="col-md-2">
           <div class="flex flex-row items-center space-x-2 text-lg whitespace-nowrap">
-                        <span style="color:white ;margin-left : 10px">Your Vaults</span>
+                        <span style="color:white ;margin-top:10px;margin-left : 10px">Your Vaults</span>
                        
                     </div>
         </div>
