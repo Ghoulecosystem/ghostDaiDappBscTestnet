@@ -157,7 +157,7 @@
     </div>
     <div class="text-base text-dm-text-primary text-right">Max borrow: {{parseFloat(vaultData.availableBorrow).toFixed(2)}} gDai</div>
 </div>
-<span class="w-full text-red text-center" v-if="parseFloat(vaultData.vaultCollateral) == 0">You must deposit collateral before you can borrow Mai (miMatic).</span>
+<span class="w-full text-red text-center" v-if="parseFloat(vaultData.vaultCollateral) == 0">You must deposit collateral before you can borrow gDai (ghostDai).</span>
 </div>
 <div  v-if="parseFloat(vaultData.vaultCollateral) != 0">
   <div class="flex items-center relative w-full mb-4">
