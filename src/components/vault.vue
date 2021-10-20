@@ -34,7 +34,7 @@
            
             <div class="grid grid-cols-4 pb-4 px-4 text-sm  text-secondary "  >
                 <div>Vault ID</div>
-                <div class="flex items-center justify-end">Collateral (ETH)</div>
+                <div class="flex items-center justify-end">Collateral (BNB)</div>
                 <div class="flex items-center justify-end">Debt (gDai)</div>
                 <div class="flex items-center justify-end">Ratio</div>
             </div>
@@ -63,7 +63,7 @@
                           <div class="row">
                               <div class="col-md-10 text-secondary md:text-white">Collateral</div>
                               <div class="col-md-2 flex items-center">
-                                  <div class="text-lg text-white overflow-hidden overflow-ellipsis"><span class="pull-right">{{parseFloat(vault.vaultCollateral).toFixed(2) }} Eth</span></div>
+                                  <div class="text-lg text-white overflow-hidden overflow-ellipsis"><span class="pull-right">{{parseFloat(vault.vaultCollateral).toFixed(2) }} BNB</span></div>
                               </div>
                           </div>
                           <div class="row">
@@ -220,7 +220,7 @@ export default {
                         sortable: false,
                         value: 'id',
                         },
-                        { text: 'Collateral (ETH)', value: 'Collateral' },
+                        { text: 'Collateral (BNB)', value: 'Collateral' },
                         { text: 'Debt gDai', value: 'Debt' },
                         { text: 'Ratio(%)', value: 'ratio' },
         

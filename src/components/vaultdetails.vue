@@ -21,7 +21,7 @@
       </button>
     </div>
         <div class="col-md-3 flex items-center">
-          <div class="sc-kLIISr buSGRA text-white">Eth Vault #{{id}}</div>
+          <div class="sc-kLIISr buSGRA text-white">BNB Vault #{{id}}</div>
         </div>
        </div>
        <!-- vif -->
@@ -37,7 +37,7 @@
                 <div class="text-lg text-secondary">Collateral</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="sc-kLIISr buSGRA text-white">{{parseFloat(vaultData.vaultCollateral).toFixed(2)}} Eth</div>
+                <div class="sc-kLIISr buSGRA text-white">{{parseFloat(vaultData.vaultCollateral).toFixed(2)}} BNB</div>
               </div>
              </div>
              <div class="row">
@@ -115,13 +115,13 @@
                     </span>
                     <span class="mx-2">Deposit collateral</span>
                 </div>
-                <div class="text-base text-dm-text-primary text-right">Balance: {{ethBalance}} ETH</div>
+                <div class="text-base text-dm-text-primary text-right">Balance: {{ethBalance}} BNB</div>
             </div>
             <div class="flex items-center relative w-full mb-4">
                 <input v-model="depositValue" inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" min="0" minlength="1" maxlength="79" spellcheck="false" class="sc-fhYwyz gehgmm text-gray-900 w-full p-3 bg-input rounded focus:ring focus:ring-dm-gray" value="">
                 <button class="bg-transparent px-2 py-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring absolute right-4 focus:ring text-xs bg-dm-primary focus:ring-offset-dm-gray opacity-100 disabled:pointer-events-none disabled:opacity-10" style="color: white" @click="depositMax">MAX</button>
             </div>
-            <button style="background : #209719 !important" class=" bg-opacity-80 w-full rounded text-base hover:bg-opacity-100 disabled:opacity-20 disabled:cursor-default p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring bg-dm-primary text-white opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="deposit()">Deposit ETH</button>
+            <button style="background : #209719 !important" class=" bg-opacity-80 w-full rounded text-base hover:bg-opacity-100 disabled:opacity-20 disabled:cursor-default p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring bg-dm-primary text-white opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="deposit()">Deposit BNB</button>
         </div>
     </div>
     <div v-if="activeWithdraw" class="react-tabs__tab-panel react-tabs__tab-panel--selected" role="tabpanel" id="react-tabs-3" aria-labelledby="react-tabs-2"><div>
@@ -131,13 +131,13 @@
         </span>
         <span class="mx-2">Withdraw collateral</span>
     </div>
-    <div class="text-base text-dm-text-primary text-right">Available: {{parseFloat(vaultData.vaultCollateral).toFixed(2)}} ETH</div>
+    <div class="text-base text-dm-text-primary text-right">Available: {{parseFloat(vaultData.vaultCollateral).toFixed(2)}} BNB</div>
 </div>
 <div class="flex items-center relative w-full mb-4">
     <input v-model="withdrawValue" inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" min="0" minlength="1" maxlength="79" spellcheck="false" class="sc-fhYwyz gehgmm text-gray-900 w-full p-3 bg-input rounded focus:ring focus:ring-dm-gray" value="">
     <button class="bg-transparent px-2 py-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring absolute right-4 focus:ring text-xs bg-dm-primary focus:ring-offset-dm-gray opacity-100 disabled:pointer-events-none disabled:opacity-10" style="color: white" @click="withdrawMax">MAX</button>
   </div>
-<button style="background : #209719 !important" class=" bg-opacity-80 w-full rounded text-base hover:bg-opacity-100 disabled:opacity-20 disabled:cursor-default p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring bg-dm-primary text-white opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="withdraw()">Withdraw ETH</button>
+<button style="background : #209719 !important" class=" bg-opacity-80 w-full rounded text-base hover:bg-opacity-100 disabled:opacity-20 disabled:cursor-default p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring bg-dm-primary text-white opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="withdraw()">Withdraw BNB</button>
 </div>
 </div>
 <div v-if="activeBorrow" class="react-tabs__tab-panel react-tabs__tab-panel--selected" role="tabpanel" id="react-tabs-5" aria-labelledby="react-tabs-4">
@@ -214,6 +214,7 @@ export default {
       withdrawValue : 0,
       repayValue: 0,
       borrowValue : 0 ,
+      allowance : 0,
          owner: "",
          approve : true,
         loading: false,
@@ -228,11 +229,23 @@ export default {
     //    }
     //  }, 1000);
        setTimeout(() => {
+         this.getAllowance();
         this.loadData();
         
    },1000)
      
     console.log(this.$route.params.id);
+ },
+ watch : {
+repayValue :async function(newvalue){
+  console.log(newvalue)
+  await this.getAllowance();
+  if(parseFloat(this.allowance )> parseFloat(newvalue)){
+     this.approve = false;
+  }else{
+     this.approve = true;
+  }
+}
  },
  computed : {
   gDaiBalance : function(){
@@ -260,6 +273,12 @@ export default {
 
  },
  methods : {
+   async   getAllowance(){
+     this.allowance = await window.tokenContract.methods.allowance(this.user.address , tokenAddress).call();
+     this.allowance =  window.web3.utils.fromWei(this.allowance);
+     console.log("allowance")
+     console.log(this.allowance)
+   },
   async   approveToken(){
                this.loading = true
         try {     
@@ -357,10 +376,10 @@ borrowMax(val){
        vault.debt = await window.tokenContract.methods.vaultDebt(array[index]).call();
        vault.debt = window.web3.utils.fromWei(vault.debt);
        vault.vaultCollateral = await window.tokenContract.methods.vaultCollateral(array[index]).call();
-       vault.vaultCollateral = window.web3.utils.fromWei(vault.vaultCollateral);
+       vault.vaultCollateral = 
       console.log( typeof( vault.debt))
      
-      vault.availableBorrow = (((parseFloat(vault.vaultCollateral) * parseFloat(this.ethPrice) ) / (150 * parseFloat( this.gDaiPrice))) * 100) - parseFloat(vault.debt);
+      vault.availableBorrow = (((parseFloat(vault.vaultCollateral) * parseFloat(this.ethPrice) ) / (150 * parseFloat( this.gDaiPrice))) * 100) -window.web3.utils.fromWei(vault.vaultCollateral); parseFloat(vault.debt);
       if(parseInt(vault.debt) !=0) {   
         vault.ratio = (parseFloat(vault.vaultCollateral) * parseFloat(this.ethPrice) / (parseFloat(vault.debt) *parseFloat( this.gDaiPrice))) * 100;
 
