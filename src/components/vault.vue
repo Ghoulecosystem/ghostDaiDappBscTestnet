@@ -5,14 +5,15 @@
                </div>
   <div class="relative bg-dm-tertiary" style="border-radius: 10px; background-image: url(&quot;&quot;); background-repeat: no-repeat; background-size: contain; background-position: center bottom;">
     <div>
-        <div class="flex justify-between items-center bg-dm-secondary flex items-center rounded-t px-2 py-4 sm:px-8 sm:py-6">
-            <div class="grid grid-cols-2 md:grid-cols-6  w-full">
-                <div class="mb-4 md:flex md:mb-0 items-center col-span-4 md:col-span-4">
-                    <div class="flex flex-row items-center space-x-2 text-lg whitespace-nowrap">
-                        <span style="color:white ; margin-top : 11px">Your Vaults</span>
+      <div class="row ">
+        <div class="col-md-2">
+          <div class="flex flex-row items-center space-x-2 text-lg whitespace-nowrap">
+                        <span style="color:white ;margin-left : 10px">Your Vaults</span>
                        
                     </div>
-                     <div v-if="search"  style="padding-left : 40px" class="flex flex-row items-center space-x-2 text-lg whitespace-nowrap">
+        </div>
+        <div class="col-md-6">
+          <div v-if="search"  style="padding-left : 40px" class="flex flex-row items-center space-x-2 text-lg whitespace-nowrap">
                        <div class="row">
                               
                             <div class="col-7"><input type="number" v-model="valtId" class="form-control" style="height: 40px; border-radius: 20px;margin-right: 30px; color: black" placeholder="Vault ID"></div>
@@ -22,13 +23,15 @@
                           </button></div>
                           </div>
                     </div>
-                </div>
-                <!-- <button class="btn btn-success">create</button> -->
-                <button  style="padding :0px !important" class="bg-transparent p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring col-span-1 bg-dm-primary text-white opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="openSearch()" v-if="vaults.length > 10">Search</button>
-                <button  style="padding :0px !important" class="bg-transparent p-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring bg-dm-primary text-white col-span-1 opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="create" >Create</button>
-            </div>
-           
         </div>
+        <div class="col-md-4">
+          <span class="float-right" style="margin-right : 25px">
+             <button   class="bg-transparent p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring col-span-1 bg-dm-primary text-white opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="openSearch()" v-if="vaults.length > 10">Search</button>
+                <button  class="bg-transparent bg-opacity-80 w-full rounded text-base hover:bg-opacity-100 disabled:opacity-20 disabled:cursor-default p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring bg-dm-primary text-white opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="create" >Create</button>
+          </span>
+        </div>
+      </div>
+       
         
         <div class="px-2 py-4 sm:p-8">
            
@@ -54,7 +57,8 @@
                           <span class="text-white text-right overflow-ellipsis overflow-hidden">{{parseFloat(vault.debt).toFixed(2) }}</span>
                       </div>
                       <div class="flex justify-end items-center">
-                          <div style="color:white">{{parseFloat(vault.ratio).toFixed(2)}} %</div>
+                          <div style="color:white" v-if="isNaN(parseFloat(vault.ratio).toFixed(2))">0%</div>
+                          <div style="color:white" v-else>{{parseFloat(vault.ratio).toFixed(2)}} %</div>
                   </div>
               </div>
               <div class="p-4 space-y-4" :id="'vault' + vault.id" style="display: none;">
@@ -90,14 +94,21 @@
                        <div class="row">
                         <div class="col-md-10 text-secondary md:text-white">Collateral to Debt Ratio</div>
                         <div class="col-md-2 flex items-center">
-                            <div class="text-lg text-white overflow-hidden overflow-ellipsis"><span class="pull-right">{{(((parseFloat(bnbprice) * parseFloat(vault.vaultCollateral)) /(parseFloat(gDaiPrice)* parseFloat(vault.debt))) *100).toFixed(2)}} %</span></div>
+                            <div class="text-lg text-white overflow-hidden overflow-ellipsis"><span class="pull-right" v-if="isNaN((((parseFloat(bnbprice) * parseFloat(vault.vaultCollateral)) /(parseFloat(gDaiPrice)* parseFloat(vault.debt))) *100).toFixed(2))">0 %</span>
+                            <span class="pull-right" v-else >{{(((parseFloat(bnbprice) * parseFloat(vault.vaultCollateral)) /(parseFloat(gDaiPrice)* parseFloat(vault.debt))) *100).toFixed(2)}} %</span>
+                            </div>
+
+                           
                         </div>
                        </div>
   
                        <div class="row">
                         <div class="col-md-10 text-secondary md:text-white">Available to Borrow</div>
                         <div class="col-md-2 flex items-center">
-                            <div class="text-lg text-white overflow-hidden overflow-ellipsis"><span class="pull-right">{{parseFloat(vault.availableBorrow).toFixed(2)}} gDai</span></div>
+                            <div class="text-lg text-white overflow-hidden overflow-ellipsis">
+                              <span class="pull-right" v-if="isNaN(parseFloat(vault.availableBorrow).toFixed(2))">0 gDai</span>
+                              <span class="pull-right" v-else>{{parseFloat(vault.availableBorrow).toFixed(2)}} gDai</span>
+                              </div>
                         </div>
                        </div>
                          

@@ -37,7 +37,8 @@
                 <div class="text-lg text-secondary">Collateral</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="sc-kLIISr buSGRA text-white">{{parseFloat(vaultData.vaultCollateral).toFixed(2)}} BNB</div>
+                <div class="sc-kLIISr buSGRA text-white" v-if="isNaN(parseFloat(vaultData.vaultCollateral).toFixed(2))">0 BNB</div>
+                <div class="sc-kLIISr buSGRA text-white" v-else>{{parseFloat(vaultData.vaultCollateral).toFixed(2)}} BNB</div>
               </div>
              </div>
              <div class="row">
@@ -45,7 +46,8 @@
                 <div class="text-lg text-secondary">Debt</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis">{{parseFloat(vaultData.debt).toFixed(2)}}  gDai </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="isNaN(parseFloat(vaultData.debt).toFixed(2))">0  gDai </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>{{parseFloat(vaultData.debt).toFixed(2)}}  gDai </div>
               </div>
              </div>
              <div class="row">
@@ -53,7 +55,8 @@
                 <div class="text-lg text-secondary">Collateral Value</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis">${{(parseFloat(bnbprice) * parseFloat(vaultData.vaultCollateral)).toFixed(2)}}  </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="(parseFloat(bnbprice) * parseFloat(vaultData.vaultCollateral)).toFixed(2)">$0  </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>  ${{(parseFloat(bnbprice) * parseFloat(vaultData.vaultCollateral)).toFixed(2)}}  </div>
               </div>
              </div>
           
@@ -62,7 +65,8 @@
                 <div class="text-lg text-secondary">Debt Value</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis">${{(parseFloat(gDaiPrice)* parseFloat(vaultData.debt)).toFixed(2)}}  </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="isNaN((parseFloat(gDaiPrice)* parseFloat(vaultData.debt)).toFixed(2))">$0  </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>${{(parseFloat(gDaiPrice)* parseFloat(vaultData.debt)).toFixed(2)}}  </div>
               </div>
              </div>
             
@@ -72,9 +76,8 @@
                 <div class="text-lg text-secondary">Collateral to Debt Ratio</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis">
-                  {{parseFloat(vaultData.ratio).toFixed(2)}} %
-                </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="isNaN(parseFloat(vaultData.ratio).toFixed(2))">0 %</div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>{{parseFloat(vaultData.ratio).toFixed(2)}} %</div>
               </div>
              </div>
             
@@ -92,7 +95,8 @@
                 <div class="text-lg text-secondary">Available to Borrow</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis">{{parseFloat(vaultData.availableBorrow).toFixed(2)}} gDai</div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="isNaN(parseFloat(vaultData.availableBorrow).toFixed(2))">0 gDai</div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>{{parseFloat(vaultData.availableBorrow).toFixed(2)}} gDai</div>
               </div>
              </div>
             
@@ -131,7 +135,8 @@
         </span>
         <span class="mx-2">Withdraw collateral</span>
     </div>
-    <div class="text-base text-dm-text-primary text-right">Available: {{parseFloat(vaultData.vaultCollateral).toFixed(2)}} BNB</div>
+    <div class="text-base text-dm-text-primary text-right" v-if="isNaN(parseFloat(vaultData.vaultCollateral).toFixed(2))">Available: 0 BNB</div>
+    <div class="text-base text-dm-text-primary text-right" v-else>Available: {{parseFloat(vaultData.vaultCollateral).toFixed(2)}} BNB</div>
 </div>
 <div class="flex items-center relative w-full mb-4">
     <input v-model="withdrawValue" inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" min="0" minlength="1" maxlength="79" spellcheck="false" class="sc-fhYwyz gehgmm text-gray-900 w-full p-3 bg-input rounded focus:ring focus:ring-dm-gray" value="">
@@ -155,7 +160,8 @@
             </span>
         </span>
     </div>
-    <div class="text-base text-dm-text-primary text-right">Max borrow: {{parseFloat(vaultData.availableBorrow).toFixed(2)}} gDai</div>
+    <div class="text-base text-dm-text-primary text-right" v-if="isNaN(parseFloat(vaultData.availableBorrow).toFixed(2))">Max borrow: 0 gDai</div>
+    <div class="text-base text-dm-text-primary text-right" v-else>Max borrow: {{parseFloat(vaultData.availableBorrow).toFixed(2)}} gDai</div>
 </div>
 <span class="w-full text-red text-center" v-if="parseFloat(vaultData.vaultCollateral) == 0">You must deposit collateral before you can borrow gDai (ghostDai).</span>
 </div>
