@@ -55,8 +55,7 @@
                 <div class="text-lg text-secondary">Collateral Value</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="(parseFloat(bnbprice) * parseFloat(vaultData.vaultCollateral)).toFixed(2)">$0  </div>
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>  ${{(parseFloat(bnbprice) * parseFloat(vaultData.vaultCollateral)).toFixed(2)}}  </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" >  ${{(parseFloat(bnbprice) * parseFloat(vaultData.vaultCollateral)).toFixed(2)}}  </div>
               </div>
              </div>
           
