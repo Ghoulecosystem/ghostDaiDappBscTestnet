@@ -106,11 +106,11 @@
                                         </div>
                                     </div>
                                 
-                                    <button v-if="!approved && toGdai" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="approve()">Approve Dai
+                                    <button v-if="!approved && toGdai" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  style="background : #f87171 !important" @click="approve()">Approve Dai
                                     </button>
-                                    <button v-if="!approved && !toGdai" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="approve()">Approve gDai
+                                    <button v-if="!approved && !toGdai" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  style="background : #f87171 !important"  @click="approve()">Approve gDai
                                     </button> 
-                                    <button v-if="approved" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="swap()">Swap
+                                    <button v-if="approved" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="swap()" style="background : #209719 !important">Swap
                                     </button>
                                             </div>
                                         </div>
