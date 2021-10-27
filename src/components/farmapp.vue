@@ -1,9 +1,9 @@
 <template>
     <div>
-          <div class="loader overlay"  v-show="pageloading" style="margin-bottom : 100px">
+        <div class="loader overlay"  v-show="pageloading" style="margin-bottom : 100px">
           <img :src="logo" class="rotate" width="100" height="100" />
           </div>
-<div class="flex flex-col flex-1 items-center justify-start w-screen overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20">
+         <div class="flex flex-col flex-1 items-center justify-start w-screen overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20">
         <div class="sc-gwVKww sc-daURTG gBShpO">
     
         </div>
@@ -27,7 +27,7 @@
             <span class="text-secondary">Instrument</span>
             <span class="text-secondary text-right">Pool Stats</span>
             <span class="text-secondary text-right">Your Stats</span>
-          
+            
            </div>
           
         <div class="flex flex-col rounded-lg bg-dm-secondary" style="color : white !important" v-for="(pool , count) in pools" :key="count">
@@ -43,11 +43,11 @@
                 </div>
                 <div class="flex flex-col">
                     <span class="text-right col-span-1">{{pool.deposited}} {{pool.lpSymbol}} <span class="text-sm opacity-80">STAKED</span></span>
-                    <span class="text-right col-span-1">{{pool.pending}} Ghoul <span class="text-sm opacity-80">EARNED</span></span>
+                    <span class="text-right col-span-1">{{pool.pending}} GhoulX <span class="text-sm opacity-80">EARNED</span></span>
                 </div>
             </button>
             <div class="flex flex-col md:flex-row" v-if="show && showValue == count">
-                <div class="rounded-lg p-4 flex-1 flex flex-col ">
+                <div class="rounded-lg p-4 flex flex-col ">
                 <div class="text-center p-4"><div class="mb-2">
                         <!-- <h2 class="text-sm opacity-50 mb-2">$0</h2> -->
                         <h1 class="text-2xl font-bold text-white text-center">{{pool.deposited}} </h1>
@@ -56,16 +56,18 @@
                         <img :src="guollogo" style="width: 24px; height: 24px;">
                         <span class="ml-2">{{pool.lpSymbol}} Deposited </span>
                     </h2>
-                    
+                    <h2> <span class="text-right col-span-1">{{pool.pending}} GhoulX <span class="text-sm opacity-80">EARNED</span></span></h2>
+                    <br><br>
                 </div>
-                 <div class="flex items-center  w-full mb-4">
+                 <div class="flex items-center relative w-full mb-4">
                     <input inputmode="decimal" v-model="withDrawAmount" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" min="0" minlength="1" maxlength="79" spellcheck="false" class="sc-fhYwyz gehgmm text-gray-900 w-full p-3 bg-input rounded focus:ring focus:ring-dm-gray" value="">
                     <button class="bg-transparent px-2 py-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring absolute right-4 focus:ring text-xs bg-dm-primary focus:ring-offset-dm-gray opacity-100 disabled:pointer-events-none disabled:opacity-10" style="color: white"  @click="withDrawAmount = pool.deposited">MAX</button>
                 </div>   
-                <button style="background : #209719" class="bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="withdraw(pool.id)">Withdraw
+               
+                <button style="background : #209719 ; height: 5px !important;"  class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="withdraw(pool.id)">Withdraw
                 </button>
             </div>
-            <div class="rounded-lg p-4 flex-1 flex flex-col">
+            <div class="rounded-lg p-4 flex flex-col">
                 <div class="flex text-center p-4 pb-0 flex-grow center justify-center">
                     <div>
                     <div class="mb-2">
@@ -76,7 +78,7 @@
                         <!-- <img class="sc-cpmLhU epnnMu" src="/static/media/USDC-MAI.46fd8cd3.svg" style="box-shadow: unset;"> -->
                         <span class="ml-2">{{pool.lpName}} ({{pool.lpSymbol}}) Balance</span>
                     </h2>
-                    <a target="_blank" rel="noopener noreferrer" href="https://quickswap.exchange/#/add/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174/0xa3Fa99A148fA48D14Ed51d610c367C61876997F1" class="text-baseline text-primary hover:text-white focus:text-white p-2 md:p-3 text-white mt-4">
+                    <a target="_blank" rel="noopener noreferrer" :href="'https://app.uniswap.org/#/add/v2/'+  pool.lpToken + '/0xd0A1E359811322d97991E03f863a0C30C2cF029C'" class="text-baseline text-primary hover:text-white focus:text-white p-2 md:p-3 text-white mt-4">
                         <button class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 px-2 py-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white opacity-100 disabled:pointer-events-none disabled:opacity-10">Get LP Token<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </button>
                     </a>
@@ -85,10 +87,11 @@
            <div class="flex items-center relative w-full mb-4">
                     <input inputmode="decimal" v-model="depositAmount" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" min="0" minlength="1" maxlength="79" spellcheck="false" class="sc-fhYwyz gehgmm text-gray-900 w-full p-3 bg-input rounded focus:ring focus:ring-dm-gray" value="">
                     <button class="bg-transparent px-2 py-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring absolute right-4 focus:ring text-xs bg-dm-primary focus:ring-offset-dm-gray opacity-100 disabled:pointer-events-none disabled:opacity-10" style="color: white" @click="depositAmount = pool.lpBalance" >MAX</button>
+                
                 </div>   
                
             <div  class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0 items-center">
-                <button  v-if="!approved" style="margin-top: 20px; background : #f87171" class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="approveLP(pool.lpToken)">Approve
+                <button  v-if="!approved" style="margin-top: 20px; background : #f87171"  class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="approveLP(pool.lpToken)">Approve
                 </button>
                 <button v-else style="margin-top: 20px;background : #209719" class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="deposit(pool.id)">Deposit
                 </button>
@@ -107,12 +110,10 @@
     </div>
         </div>
     </div>
-    
-    
     </div>
     </div>
     </div>
-      
+ 
 </template>
     <script>
         import  {lpAbi, farmAddress } from "../store/modules/abi";
