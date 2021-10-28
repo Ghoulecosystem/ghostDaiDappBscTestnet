@@ -11,5 +11,5 @@ const daiAddress =  "0x38a86032e1f0d852a0e40b16849a0909ea74b28c"
 const swapAddress = "0xE0666D4ce7337E796F8d0D44E2e53a4aC7EDa4Ba"
 const guolAddress = "0x025A522EbF4eAA663D717d917d6833d6B0Ea3946"
 const tokenAddress = "0xC9F654d481E79d01448030b08516b7f9fCF71E13"
-const farmAddress = "0xcd892c0614ba4e189E7Ce4ff32355e4116bc8461"
+const farmAddress = "0x132A39366Ec1c9541A7f782eDF602f2d84e19a87"
 export  {tokenAbi , tokenAddress ,guolAbi , guolAddress , swapAbi,swapAddress , daiAbi, daiAddress , farmAbi , farmAddress ,lpAbi}
