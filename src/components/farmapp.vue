@@ -178,7 +178,9 @@
               this.pageloading = true;
                  await window.farmContract.methods.deposit(id ,window.web3.utils.toBN(window.web3.utils.toWei( this.depositAmount))).send({ from : this.user.address}); 
                  this.$toast.success("Deposit Successful");
+                 this.approved = false;
                  this.loadFarm();
+                 
               this.pageloading = false;
 
             }catch(err){
