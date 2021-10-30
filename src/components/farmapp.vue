@@ -230,6 +230,7 @@
                    info.deposited  = parseFloat(window.web3.utils.fromWei(info.deposited)).toFixed(2);
 
                    info.pending =  await window.farmContract.methods.pending(i , this.user.address).call();
+                   info.pending = parseFloat(window.web3.utils.fromWei(info.pending)).toFixed(2);
                    let userinfo =  await window.farmContract.methods.userInfo(i , this.user.address).call();
                    info.amount = userinfo[0];
                    info.rewardDept = userinfo[1];
