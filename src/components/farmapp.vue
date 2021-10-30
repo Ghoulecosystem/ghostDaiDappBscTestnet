@@ -180,7 +180,8 @@
                  this.$toast.success("Deposit Successful");
                  this.approved = false;
                  this.loadFarm();
-                 
+                 this.$store.dispatch("vault/getPriceData" );
+                 this.$store.dispatch("vault/loadBalances" );
               this.pageloading = false;
 
             }catch(err){
@@ -200,6 +201,8 @@
                  await window.farmContract.methods.withdraw(id ,window.web3.utils.toBN(window.web3.utils.toWei( this.withDrawAmount))).send({ from : this.user.address}); 
                  this.$toast.success("Deposit Successful");
                 this.loadFarm(); 
+                this.$store.dispatch("vault/getPriceData" );
+                this.$store.dispatch("vault/loadBalances" );
               this.pageloading = false;
 
             }catch(err){
