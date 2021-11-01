@@ -228,12 +228,12 @@
                 }
                
                  let poolLength = await window.farmContract.methods.poolLength().call();
-                 console.log(poolLength)
+                //  console.log(poolLength)
                  let pools = []
                  for(let i = 0; i < poolLength ; i++){
                      let info = {};
                   let poolInfo =   await window.farmContract.methods.poolInfo(i).call();
-                  console.log(poolInfo);
+                //   console.log(poolInfo);
                   info.id = i;
                    info.deposited =  await window.farmContract.methods.deposited(i , this.user.address).call();
                    info.deposited  = parseFloat(window.web3.utils.fromWei(info.deposited)).toFixed(2);
@@ -264,7 +264,7 @@
                     }else{
                         info.approved = false;
                     }
-                   console.log(info)
+                //    console.log(info)
                  pools.push(info);     
                  }
                  this.pools = pools;
