@@ -91,7 +91,7 @@
                 </div>   
                
             <div  class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0 items-center">
-                <button  v-if="!approved" style="margin-top: 20px; background : #f87171"  class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="approveLP(pool.lpToken)">Approve
+                <button  v-if="!pool.approved" style="margin-top: 20px; background : #f87171"  class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="approveLP(pool.lpToken)">Approve
                 </button>
                 <button v-else style="margin-top: 20px;background : #209719" class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="deposit(pool.id)">Deposit
                 </button>
@@ -140,13 +140,16 @@
         watch : {
             user : function(newuser){
                 console.log(newuser);
-                this.loadFarm()
+                this.loadFarm(true)
             }
         },
         mounted() {
+            setInterval(() => {
+                this.loadFarm(false);
+            }, 10000);
             if(this.user.address){
                setTimeout(() => {
-                this.loadFarm();
+                this.loadFarm(true);
                },2000)
 
             }
@@ -156,9 +159,9 @@
             try{
               this.pageloading = true;
                  let lp =  await new window.web3.eth.Contract( lpAbi , lpToken);
-                 await lp.methods.approve(farmAddress ,window.web3.utils.toBN(window.web3.utils.toWei( this.depositAmount))).send({ from : this.user.address}); 
+                 await lp.methods.approve(farmAddress , window.web3.utils.toBN(window.web3.utils.toWei('1000000000000000'))).send({ from : this.user.address}); 
                  this.$toast.success("Approval Successful");
-                 this.approved = true;
+              this.loadFarm(true);
               this.pageloading = false;
 
             }catch(err){
@@ -179,7 +182,7 @@
                  await window.farmContract.methods.deposit(id ,window.web3.utils.toBN(window.web3.utils.toWei( this.depositAmount))).send({ from : this.user.address}); 
                  this.$toast.success("Deposit Successful");
                  this.approved = false;
-                 this.loadFarm();
+                 this.loadFarm(true);
                  this.$store.dispatch("vault/getPriceData" );
                  this.$store.dispatch("vault/loadBalances" );
               this.pageloading = false;
@@ -200,7 +203,7 @@
               this.pageloading = true;
                  await window.farmContract.methods.withdraw(id ,window.web3.utils.toBN(window.web3.utils.toWei( this.withDrawAmount))).send({ from : this.user.address}); 
                  this.$toast.success("Deposit Successful");
-                this.loadFarm(); 
+                this.loadFarm(true); 
                 this.$store.dispatch("vault/getPriceData" );
                 this.$store.dispatch("vault/loadBalances" );
               this.pageloading = false;
@@ -218,12 +221,15 @@
          }
          this.showValue = value;
         },
-         async loadFarm(){
+         async loadFarm(load){
             try {   
-                this.loading = true;
+                if(load){
+                     this.loading = true;
+                }
+               
                  let poolLength = await window.farmContract.methods.poolLength().call();
                  console.log(poolLength)
-                 this.pools =[];
+                 let pools = []
                  for(let i = 0; i < poolLength ; i++){
                      let info = {};
                   let poolInfo =   await window.farmContract.methods.poolInfo(i).call();
@@ -250,15 +256,29 @@
                    info.lpSymbol = await lp.methods.symbol().call();
                    info.lpBalance = await lp.methods.balanceOf(this.user.address).call(); 
                    info.lpBalance  = parseFloat(window.web3.utils.fromWei(info.lpBalance )).toFixed(2);
+                    
+                    info.allowance = await lp.methods.allowance(this.user.address , farmAddress).call();
+                    info.allowance =  window.web3.utils.fromWei(info.allowance );
+                    if(parseInt(info.allowance) > 0){
+                        info.approved = true;
+                    }else{
+                        info.approved = false;
+                    }
                    console.log(info)
-                    this.pools.push(info);     
+                 pools.push(info);     
                  }
-                this.loading = false;
+                 this.pools = pools;
+                 if(load){
+                 this.loading = false;
+                 }
+               
 
              }
             catch(error){
                 console.log(error);
-                this.loading = false;
+                if(load){
+                 this.loading = false;
+                 }
             }  
          }  
         },

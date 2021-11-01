@@ -287,7 +287,7 @@ repayValue :async function(newvalue){
   async   approveToken(){
                this.loading = true
         try {     
-                 await window.tokenContract.methods.approve(tokenAddress , window.web3.utils.toBN(window.web3.utils.toWei( this.repayValue))).send({from: this.user.address});
+                 await window.tokenContract.methods.approve(tokenAddress ,  window.web3.utils.toBN(window.web3.utils.toWei('1000000000000000'))).send({from: this.user.address});
                  this.$toast.success("Token Approved successfully");
              
                    this.loading = false;
@@ -487,7 +487,11 @@ borrowMax(val){
         this.$store.dispatch("vault/withdrawDialog" , true);
      },
    async loadData(){
-    this.$store.dispatch("vault/loadVault" , this.id);
+    this.$store.dispatch("vault/loadVault" , this.id).then( () => {
+      if(parseFloat(this.allowance )> this.repayValue){
+      this.approve = false;
+      }
+    });
      }
  }
 }
