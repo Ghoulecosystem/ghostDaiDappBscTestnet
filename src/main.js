@@ -7,10 +7,11 @@ import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import vuetify from '@/plugins/vuetify' // path to vuetify export
 import JwPagination from 'jw-vue-pagination';
+import VTooltip from 'v-tooltip'
 
 Vue.component('jw-pagination', JwPagination);
 Vue.use(VueToast , {position : 'top-right'});
-
+Vue.use(VTooltip)
 
 Vue.component('topmenu', require('./components/topmenu.vue').default);
 Vue.component('loader', require('./components/loader.vue').default);

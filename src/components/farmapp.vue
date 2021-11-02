@@ -18,7 +18,7 @@
         <div  class="relative bg-dm-tertiary" style="border-radius: 10px; background-image: url(&quot;&quot;); background-repeat: no-repeat; background-size: contain; background-position: center bottom;">
             <div>
                <div class="flex justify-between items-center bg-dm-secondary flex items-center rounded-t px-4 sm:px-8 py-4 sm:py-6">
-            <h2 class="mr-4">Reward Instruments</h2>
+            <h2 class="mr-4">Farm and Stake</h2>
           
         </div>
         <div class="px-2 py-4 sm:p-8">
@@ -57,7 +57,10 @@
                         <span class="ml-2">{{pool.lpSymbol}} Deposited </span>
                     </h2>
                     <h2> <span class="text-right col-span-1">{{pool.pending}} GhoulX <span class="text-sm opacity-80">EARNED</span></span></h2>
-                    <br><br>
+                    
+                     <button data-toggle="tooltip" data-placement="top" title="anytime you add or withdraw, reward is claimed." style="background : #209719 !important ; margin-top:10px"  class=" bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-1 flex flex-row items-center justify-center rounded focus:outline-none focus:ring  opacity-100 disabled:pointer-events-none disabled:opacity-10" @click="Harvest(pool.id)">Harvest
+                         
+                   </button>
                 </div>
                  <div class="flex items-center relative w-full mb-4">
                     <input inputmode="decimal" v-model="withDrawAmount" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" min="0" minlength="1" maxlength="79" spellcheck="false" class="sc-fhYwyz gehgmm text-gray-900 w-full p-3 bg-input rounded focus:ring focus:ring-dm-gray" value="">
@@ -155,6 +158,22 @@
             }
         },
         methods :{
+        async Harvest(id){
+            try{
+              this.pageloading = true;
+                 await window.farmContract.methods.withdraw(id ,0).send({ from : this.user.address}); 
+                 this.$toast.success("Harvest Successful");
+                this.loadFarm(true); 
+                this.$store.dispatch("vault/getPriceData" );
+                this.$store.dispatch("vault/loadBalances" );
+              this.pageloading = false;
+
+            }catch(err){
+              this.pageloading = false;
+                 this.$toast.error("Transaction Reverted");
+                console.log(err);
+            }
+        },
         async approveLP(lpToken){
             try{
               this.pageloading = true;
@@ -202,7 +221,7 @@
             try{
               this.pageloading = true;
                  await window.farmContract.methods.withdraw(id ,window.web3.utils.toBN(window.web3.utils.toWei( this.withDrawAmount))).send({ from : this.user.address}); 
-                 this.$toast.success("Deposit Successful");
+                 this.$toast.success("Withdrawal Successful");
                 this.loadFarm(true); 
                 this.$store.dispatch("vault/getPriceData" );
                 this.$store.dispatch("vault/loadBalances" );
@@ -284,3 +303,111 @@
         },
     }
     </script>
+
+    <style scoped>
+    .tooltip {
+  display: block !important;
+  z-index: 10000;
+}
+
+.tooltip .tooltip-inner {
+  background: black;
+  color: white;
+  border-radius: 16px;
+  padding: 5px 10px 4px;
+}
+
+.tooltip .tooltip-arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+  margin: 5px;
+  border-color: black;
+  z-index: 1;
+}
+
+.tooltip[x-placement^="top"] {
+  margin-bottom: 5px;
+}
+
+.tooltip[x-placement^="top"] .tooltip-arrow {
+  border-width: 5px 5px 0 5px;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  bottom: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tooltip[x-placement^="bottom"] {
+  margin-top: 5px;
+}
+
+.tooltip[x-placement^="bottom"] .tooltip-arrow {
+  border-width: 0 5px 5px 5px;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-top-color: transparent !important;
+  top: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tooltip[x-placement^="right"] {
+  margin-left: 5px;
+}
+
+.tooltip[x-placement^="right"] .tooltip-arrow {
+  border-width: 5px 5px 5px 0;
+  border-left-color: transparent !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+  left: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.tooltip[x-placement^="left"] {
+  margin-right: 5px;
+}
+
+.tooltip[x-placement^="left"] .tooltip-arrow {
+  border-width: 5px 0 5px 5px;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  right: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.tooltip.popover .popover-inner {
+  background: #f9f9f9;
+  color: black;
+  padding: 24px;
+  border-radius: 5px;
+  box-shadow: 0 5px 30px rgba(black, .1);
+}
+
+.tooltip.popover .popover-arrow {
+  border-color: #f9f9f9;
+}
+
+.tooltip[aria-hidden='true'] {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .15s, visibility .15s;
+}
+
+.tooltip[aria-hidden='false'] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .15s;
+}
+    </style>
