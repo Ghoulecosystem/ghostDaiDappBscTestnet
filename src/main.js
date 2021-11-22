@@ -25,6 +25,7 @@ Vue.component('transfervault', require('./components/transfervault.vue').default
 Vue.component('monitor', require('./components/monitor.vue').default);
 Vue.component('swapcom', require('./components/swapcom.vue').default);
 Vue.component('farmapp', require('./components/farmapp.vue').default);
+Vue.component('bnbvault', require('./components/bnbvault.vue').default);
 new Vue({
   router,
   store,

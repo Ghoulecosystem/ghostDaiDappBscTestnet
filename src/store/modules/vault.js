@@ -137,7 +137,7 @@ const actions = {
     withdrawDialog({commit} , status){
         commit("setwithdrawDialog" , status);
     },
-    async createVault(){
+    async createBNBVault(){
         await window.tokenContract.methods.createVault().send({from: this.state.currentUser.user.address}).then(function(result ){
            
              return new Promise( (resolve) => {
@@ -148,6 +148,18 @@ const actions = {
                 reject(error);
              }) 
         })
+},
+async createWethVault(){
+    await window.wethVaultContract.methods.createVault().send({from: this.state.currentUser.user.address}).then(function(result ){
+           
+        return new Promise( (resolve) => {
+           resolve(result.events.CreateVault.returnValues.vaultID);
+        })
+   }).catch( function(error){
+       return new Promise( (_,reject) => {
+           reject(error);
+        }) 
+   })
 }
 };
 const mutations = {

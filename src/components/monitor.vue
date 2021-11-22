@@ -55,7 +55,9 @@
              </div> -->
              
                   <div v-if="vaults.length == 0" class="flex-col space-y-2"><div class="w-full text-center py-6" style="color: white;"> no vaults.</div></div>
-                
+                 <div class="card-footer pb-0 pt-3">
+                  <jw-pagination :items="vaults" @changePage="onChangePage"></jw-pagination>
+              </div>
       </div >
   </div>
   </div>

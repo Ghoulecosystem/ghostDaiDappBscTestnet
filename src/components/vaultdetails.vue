@@ -28,7 +28,7 @@
      
 <div class="flex flex-col"><div class="flex-1 flex flex-col p-4">
     <div class="flex-col space-y-8">
-        <div class="flex-col space-y-2">
+        <div class="flex-col space-y-2" v-if="!loading_data">
             <div class="flex justify-between">
                 <div class="text-xl text-white">Vault Info</div>
             </div>
@@ -98,7 +98,18 @@
                 <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>{{parseFloat(vaultData.availableBorrow).toFixed(2)}} gDai</div>
               </div>
              </div>
+             <div class="row">
+              <div class="col-md-9 text-secondary md:text-white">
+                
+              </div>
+              <div class="col-md-3flex items-center">
+              <span v-if="parseInt(vaultData.ratio) < 150"><button class="btn btn-danger  float-right" @click="liquidateVault(id)">Liquidate Vault</button></span>
+              </div>
+             </div>
             
+    </div>
+    <div v-else>
+      <h5 style="text-align: center">loading...</h5>
     </div>
     <div v-if="user.address == vaultData.owner" class="react-tabs" data-tabs="true">
         <div class="flex justify-between mb-2">
@@ -210,6 +221,7 @@ export default {
  props: ['id'], 
  data(){
      return {
+       loading_data : true,
       logo : require('@/assets/loogo.png'),
       activeDeposit:true,
       activeBorrow : false,
@@ -287,7 +299,7 @@ repayValue :async function(newvalue){
   async   approveToken(){
                this.loading = true
         try {     
-                 await window.tokenContract.methods.approve(tokenAddress ,  window.web3.utils.toBN(window.web3.utils.toWei('1000000000000000'))).send({from: this.user.address});
+                 await window.tokenContract.methods.approve(tokenAddress , window.web3.utils.toBN(window.web3.utils.toWei( this.repayValue))).send({from: this.user.address});
                  this.$toast.success("Token Approved successfully");
              
                    this.loading = false;
@@ -432,7 +444,11 @@ borrowMax(val){
 
   },
   allGdaiBalance(){
-    this.repayValue = this.gDaiBalance;
+    if(parseFloat(this.gDaiBalance) > parseFloat(this.vaultData.debt)){
+      this.repayValue = parseFloat(this.vaultData.debt).toString();
+    }else{
+      this.repayValue = parseFloat(this.gDaiBalance).toFixed(3).toString();
+    }
   },
  activate(type){
   this.offAll();
@@ -471,6 +487,20 @@ borrowMax(val){
       }
       
   },
+  async liquidateVault(id){
+     this.loading = true;
+      try {
+        await window.liquidator.methods.liquidateVault(id).send({from: this.user.address});
+        this.$toast.success("vault Liquidated successfully");
+      this.loading = false;
+      this.$router.push({ path: "/" })
+      }catch(err){
+        console.log(err);
+        this.loading = false;
+        this.$toast.error("transaction reverted");
+        
+      }
+  },
    openTransferModal(){
         this.$store.dispatch("vault/transferVaultDialog" , true);
      },
@@ -487,10 +517,9 @@ borrowMax(val){
         this.$store.dispatch("vault/withdrawDialog" , true);
      },
    async loadData(){
+     
     this.$store.dispatch("vault/loadVault" , this.id).then( () => {
-      if(parseFloat(this.allowance )> this.repayValue){
-      this.approve = false;
-      }
+      this.loading_data = false;
     });
      }
  }

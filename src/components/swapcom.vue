@@ -108,9 +108,9 @@
                                 
                                     <button v-if="!approved && toGdai" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  style="background : #f87171 !important" @click="approve()">Approve Dai
                                     </button>
-                                    <button v-if="!approved && !toGdai" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  style="background : #f87171 !important"  @click="approve()">Approve gDai
+                                    <button v-if="!approved && !toGdai " class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  style="background : #f87171 !important"  @click="approve()">Approve gDai
                                     </button> 
-                                    <button v-if="approved" class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="swap()" style="background : #209719 !important">Swap
+                                    <button v-if="approved " class="bg-dm-gray bg-opacity-80 w-full rounded text-base disabled:opacity-40 p-3 flex flex-row items-center justify-center rounded focus:outline-none focus:ring text-white mt-8 opacity-100 disabled:pointer-events-none disabled:opacity-10"  @click="swap()" style="background : #209719 !important">Swap
                                     </button>
                                             </div>
                                         </div>
@@ -140,6 +140,8 @@ export default {
         gDaiReserve : 0,
         daiRate : 0,
         gdaiRate : 0,
+        gdaiAllowance : 0,
+        daiAllowance : 0,
         validValues: true,
         validReserves : true,
         toGdai : true,
@@ -153,6 +155,7 @@ export default {
           dailogo : require('@/assets/dai.png')
       }
   },
+
    computed: {
     bnbprice : function(){
     return this.$store.state.vault.ethPrice;
@@ -184,14 +187,48 @@ export default {
             this.validReserves =  true;
             return;
         }
+         
+        if(this.toGdai){
+            console.log(parseInt(this.daiAllowance))
+            console.log(parseInt(newval))
+              if(parseInt(this.daiAllowance) >= parseInt(newval)){
+                  console.log("approved")
+                    this.approved = true;
+                }else{
+                    console.log("not approved");
+                     this.approved = false;
+                }
+        }else{
+             console.log(parseInt(this.gdaiAllowance))
+            console.log(parseInt(newval))
+            if(parseInt(this.gdaiAllowance) >= parseInt(newval)){
+                    this.approved = true;
+                  console.log("approved")
+                   
+                }else{
+                    this.approved = false;
+                    console.log("not approved");
+                }
+        }
         if(parseInt(newval) == 0){
+           
             this.recieveValue = 0;
             this.validValues = true;
             this.validReserves =  true;
             return;
         }
-        if(this.toGdai){
 
+        
+        if(this.toGdai){
+            console.log(parseInt(this.daiAllowance))
+            console.log(parseInt(newval))
+              if(parseInt(this.daiAllowance) >= parseInt(newval)){
+                  console.log("approved")
+                    this.approved = true;
+                }else{
+                    this.approved = false;
+                    console.log("not approved");
+                }
             this.recieveValue = (parseFloat(newval) * parseFloat(this.daiRate) / 100).toFixed(2);
             this.recieveValue = this.recieveValue - (this.recieveValue *(1/100));
 
@@ -207,7 +244,16 @@ export default {
                 this.validReserves =  false;
             }
         }else{
-
+             console.log(parseInt(this.gdaiAllowance))
+            console.log(parseInt(newval))
+            if(parseInt(this.gdaiAllowance) >= parseInt(newval)){
+                    this.approved = true;
+                  console.log("approved")
+                   
+                }else{
+                    this.approved = false;
+                    console.log("not approved");
+                }
             this.recieveValue = (parseFloat(newval) * parseFloat(this.gdaiRate) / 100).toFixed(2);
             this.recieveValue = this.recieveValue - (this.recieveValue *(1/100));
             if(parseFloat(this.gDaiBalance) >= parseFloat(newval)){
@@ -227,7 +273,30 @@ export default {
   },
   mounted(){
       this.loading = true;
-
+    setTimeout(()=> {
+  if(this.toGdai){
+            console.log(parseInt(this.daiAllowance))
+            console.log(parseInt(this.swapValue))
+              if(parseInt(this.daiAllowance) >= parseInt(this.swapValue)){
+                  console.log("approved")
+                    this.approved = true;
+                }else{
+                    console.log("not approved");
+                     this.approved = false;
+                }
+        }else{
+             console.log(parseInt(this.gdaiAllowance))
+            console.log(parseInt(this.swapValue))
+            if(parseInt(this.gdaiAllowance) >= parseInt(this.swapValue)){
+                    this.approved = true;
+                  console.log("approved")
+                   
+                }else{
+                    this.approved = false;
+                    console.log("not approved");
+                }
+        }
+    },2000)
     this.loadReserves();
     this.$store.dispatch("vault/getPriceData" );
     this.$store.dispatch("vault/loadBalances" ).then(()=>{
@@ -261,7 +330,7 @@ export default {
           if(parseFloat(this.swapValue) > 0 && this.validValues && this.validReserves){
               this.loading = true;
             try {
-          await window.daiContract.methods.approve(swapAddress , window.web3.utils.toBN(window.web3.utils.toWei( this.swapValue))).send({from: this.user.address});
+          await window.daiContract.methods.approve(swapAddress ,window.web3.utils.toBN(window.web3.utils.toWei('1000000000000000'))).send({from: this.user.address});
           this.$toast.success("Dai approval successful");
           this.approved = true;        
           this.loading = false;
@@ -302,8 +371,8 @@ export default {
           this.$store.dispatch("vault/getPriceData" );
           this.$store.dispatch("vault/loadBalances" );
           this.loadReserves();
-          this.approved = false;        
           this.loading = false;
+          this.swapValue = 0;
       }catch(err){
         console.log(err);
         this.loading = false;
@@ -316,7 +385,7 @@ export default {
           this.$store.dispatch("vault/getPriceData" );
           this.$store.dispatch("vault/loadBalances" );
           this.loadReserves();
-          this.approved = false;        
+          this.swapValue = 0;
           this.loading = false;
       }catch(err){
         console.log(err);
@@ -329,6 +398,12 @@ export default {
     async loadReserves(){
         try {
 
+        this.gdaiAllowance = await window.tokenContract.methods.allowance(this.user.address , swapAddress).call();
+        this.gdaiAllowance =  window.web3.utils.fromWei(this.gdaiAllowance);  
+         this.daiAllowance = await window.daiContract.methods.allowance(this.user.address , swapAddress).call();
+        this.daiAllowance =  window.web3.utils.fromWei(this.daiAllowance); 
+
+     
         let reserve = await window.swapContract.methods.getReserves().call();
         let daiRate = await window.swapContract.methods.daiRate().call();
         let gdaiRate = await window.swapContract.methods.ghostdaiRate().call();
