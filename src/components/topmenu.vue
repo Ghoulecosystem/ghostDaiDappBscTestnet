@@ -233,7 +233,7 @@ const Fortmatic = window.Fortmatic;
 const evmChains = window.evmChains;
 // Web3modal instance
 let web3Modal
-import{tokenAbi , tokenAddress ,guolAbi , guolAddress , daiAbi, daiAddress , swapAbi,swapAddress ,farmAbi , farmAddress , wethVaultAddress , wethVaultAbi} from "../store/modules/abi.js"
+import{tokenAbi , tokenAddress ,guolAbi , guolAddress , daiAbi, daiAddress , swapAbi,swapAddress ,farmAbi , farmAddress , wethVaultAddress , wethVaultAbi, wethAddress} from "../store/modules/abi.js"
 var Web3 = require('web3');
 // Chosen wallet provider given by the dialog window
 let provider;
@@ -520,6 +520,7 @@ window.daiContract   =  await new web3.eth.Contract( daiAbi ,daiAddress);
 window.swapContract   =  await new web3.eth.Contract( swapAbi ,swapAddress);
 window.farmContract   =  await new web3.eth.Contract( farmAbi , farmAddress);
 window.wethVaultContract   =  await new web3.eth.Contract(  wethVaultAbi,wethVaultAddress);
+window.wethContract =  await new web3.eth.Contract(  guolAbi ,wethAddress);
 window.web3 = web3;
 // Get connected chain id from Ethereum node
 const chainId = await web3.eth.getChainId();

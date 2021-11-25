@@ -54,10 +54,11 @@
                 <div class="flex items-center justify-end">{{parseFloat(vault.ratio).toFixed(2)}}</div>
              </div> -->
              
-                  <div v-if="vaults.length == 0" class="flex-col space-y-2"><div class="w-full text-center py-6" style="color: white;"> no vaults.</div></div>
-                 <div class="card-footer pb-0 pt-3">
+                  <div v-if="loading" class="flex-col space-y-2"><div class="w-full text-center py-6" style="color: white;">loading...</div></div>
+                  <div v-if="vaults.length == 0 && !loading" class="flex-col space-y-2"><div class="w-full text-center py-6" style="color: white;"> no vaults.</div></div>
+                   <div class="card-footer pb-0 pt-3">
                   <jw-pagination :items="vaults" @changePage="onChangePage"></jw-pagination>
-              </div>
+                 </div>
       </div >
   </div>
   </div>
@@ -69,7 +70,7 @@
 export default {
   data(){
     return{
-      
+      loading : true,
        vaults  : [],
        listedVault : [],
         headers: [
@@ -112,19 +113,22 @@ export default {
       this.vaults = [];
        window.tokenContract   =  await new window.web3.eth.Contract( tokenAbi ,tokenAddress);
       let vaultcount = await window.tokenContract.methods.vaultCount().call();
-     
+     console.log(vaultcount);
      for(let index = 0; index < vaultcount; index++){
        let vault = {};
        vault.id = index;
        vault.debt = await window.tokenContract.methods.vaultDebt(index).call();
        vault.debt = window.web3.utils.fromWei(vault.debt);
        vault.vaultCollateral = await window.tokenContract.methods.vaultCollateral(index).call();
+       if(parseFloat(vault.vaultCollateral) == 0){
+         continue;
+       }
        vault.vaultCollateral = window.web3.utils.fromWei(vault.vaultCollateral);
        vault.vaultCollateral = parseFloat(this.bnbprice) * parseFloat(vault.vaultCollateral);
        vault.debt  = parseFloat(this.gDaiPrice)* parseFloat(vault.debt);
        if(parseFloat(vault.vaultCollateral) == 0 && parseFloat(vault.debt) )
        vault.debtRatio = (parseFloat(vault.vaultCollateral) /  parseFloat(vault.debt) * 100).toFixed(2);
-      // console.log( typeof( vault.debt))
+      console.log( typeof( vault.debt))
       if(parseInt(vault.debt) !=0) {   
         vault.ratio = (parseFloat(vault.vaultCollateral)  / (parseFloat(vault.debt) )) * 100;
 
@@ -133,13 +137,14 @@ export default {
         vault.ratio = 0;
        }
 // parseFloat(vault.ratio).toFixed(2) > 0 &&
-       if( parseFloat(vault.ratio).toFixed(2) <  200){
+       if(parseFloat(vault.ratio).toFixed(2) > 0 && parseFloat(vault.ratio).toFixed(2) <  200){
           this.vaults.push(vault);
        }
 
       
        
      }
+     this.loading = false;
     },
   }
 }

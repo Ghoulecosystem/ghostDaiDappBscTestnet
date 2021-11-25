@@ -13,4 +13,5 @@ const guolAddress = "0x025A522EbF4eAA663D717d917d6833d6B0Ea3946"
 const tokenAddress = "0xC9F654d481E79d01448030b08516b7f9fCF71E13"
 const farmAddress = "0x132A39366Ec1c9541A7f782eDF602f2d84e19a87"
 const wethVaultAddress = "0x5069FA2330B8Ca3ba1838F05E2Fffe432A120141"
-export  {tokenAbi , tokenAddress ,guolAbi , guolAddress , swapAbi,swapAddress , daiAbi, daiAddress , farmAbi , farmAddress ,lpAbi , wethVaultAddress , wethVaultAbi}
+const wethAddress =  "0xd66c6b4f0be8ce5b39d52e0fd1344c389929b378"
+export  {tokenAbi , tokenAddress ,guolAbi , guolAddress , swapAbi,swapAddress , daiAbi, daiAddress , farmAbi , farmAddress ,lpAbi , wethVaultAddress , wethVaultAbi , wethAddress}

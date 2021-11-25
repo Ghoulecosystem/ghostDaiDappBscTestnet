@@ -17,6 +17,7 @@ Vue.component('topmenu', require('./components/topmenu.vue').default);
 Vue.component('loader', require('./components/loader.vue').default);
 Vue.component('vault', require('./components/vault.vue').default);
 Vue.component('vaultdetails', require('./components/vaultdetails.vue').default);
+Vue.component('wethvaultdetails', require('./components/wethvaultDetails.vue').default);
 Vue.component('depositecollateral', require('./components/depositecollateral.vue').default);
 Vue.component('withdrawcollateral', require('./components/withdrawcollateral.vue').default);
 Vue.component('borrowtoken', require('./components/borrowToken.vue').default);
@@ -25,7 +26,9 @@ Vue.component('transfervault', require('./components/transfervault.vue').default
 Vue.component('monitor', require('./components/monitor.vue').default);
 Vue.component('swapcom', require('./components/swapcom.vue').default);
 Vue.component('farmapp', require('./components/farmapp.vue').default);
-Vue.component('bnbvault', require('./components/bnbvault.vue').default);
+Vue.component('bnbvault', require('./components/vaults/bnbvault.vue').default);
+Vue.component('wethvault', require('./components/vaults/wethvault.vue').default);
+Vue.component('wethvaultmonitor', require('./components/wethvaultmonitor.vue').default);
 new Vue({
   router,
   store,

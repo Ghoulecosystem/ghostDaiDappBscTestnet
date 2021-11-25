@@ -135,6 +135,9 @@ import{wethVaultAddress } from "../store/modules/abi.js"
             openBNBVault() {
                 this.$router.push({ path: "/bnbvault" })
             },
+            openwethVault(){
+               this.$router.push({ path: "/wethvault" }) 
+            },
            formatAmount(amount) {
                let dollarUSLocale = Intl.NumberFormat('en-US');
               return  dollarUSLocale.format(parseFloat(amount));
@@ -156,6 +159,7 @@ import{wethVaultAddress } from "../store/modules/abi.js"
             this.wethVault.name = "WETH Vault";
             this.wethVault.minLiquidation = await  window.wethVaultContract.methods._minimumCollateralPercentage().call();
             this.wethVault.gdaiAvailable  =  await window.tokenContract.methods.balanceOf(wethVaultAddress).call();
+            this.wethVault.gdaiAvailable =  window.web3.utils.fromWei(this.wethVault.gdaiAvailable);
            
             this.loading =false;
            },

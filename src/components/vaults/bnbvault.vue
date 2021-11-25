@@ -57,8 +57,10 @@
                           <span class="text-white text-right overflow-ellipsis overflow-hidden">{{parseFloat(vault.debt).toFixed(2) }}</span>
                       </div>
                       <div class="flex justify-end items-center">
-                          <div style="color:white" v-if="isNaN(parseFloat(vault.ratio).toFixed(2))">0%</div>
-                          <div style="color:white" v-else>{{parseFloat(vault.ratio).toFixed(2)}} %</div>
+                          <!-- <div style="color:white" v-if="isNaN(parseFloat(vault.ratio).toFixed(2))">0%</div> -->
+                          <!-- <div style="color:white" >{{parseFloat(vault.ratio).toFixed(2)}} %</div> -->
+                          <span style="color:white"  class="pull-right" v-if="isNaN((((parseFloat(bnbprice) * parseFloat(vault.vaultCollateral)) /(parseFloat(gDaiPrice)* parseFloat(vault.debt))) *100).toFixed(2))">0 %</span>
+                            <span style="color:white"  class="pull-right" v-else >{{(((parseFloat(bnbprice) * parseFloat(vault.vaultCollateral)) /(parseFloat(gDaiPrice)* parseFloat(vault.debt))) *100).toFixed(2)}} %</span>
                   </div>
               </div>
               <div class="p-4 space-y-4" :id="'vault' + vault.id" style="display: none;">
