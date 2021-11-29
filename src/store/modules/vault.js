@@ -127,7 +127,7 @@ const actions = {
        vault.vaultCollateral = window.web3.utils.fromWei(vault.vaultCollateral);
        vault.availableBorrow = (((parseFloat(vault.vaultCollateral) * parseFloat(state.wethPrice) ) / (150 * parseFloat( state.gDaiPrice))) * 100) - parseFloat(vault.debt);
        if(parseFloat(vault.debt) !=0) {   
-         vault.ratio = (parseFloat(vault.vaultCollateral) * parseFloat(state.ethPrice) / (parseFloat(vault.debt) *parseFloat( state.gDaiPrice))) * 100;
+         vault.ratio = (parseFloat(vault.vaultCollateral) * parseFloat(state.wethPrice) / (parseFloat(vault.debt) *parseFloat( state.gDaiPrice))) * 100;
  
        }
         else {

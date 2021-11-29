@@ -41,13 +41,21 @@
                 <div class="sc-kLIISr buSGRA text-white" v-else>{{parseFloat(vaultData.vaultCollateral).toFixed(4)}} WETH</div>
               </div>
              </div>
+               <div class="row">
+              <div class="col-md-10 text-secondary md:text-white">
+                <div class="text-lg text-secondary">Weth Price</div>
+              </div>
+              <div class="col-md-2 flex items-center">
+                <div class="sc-kLIISr buSGRA text-white">${{parseFloat(WETHprice).toFixed(2)}}</div>
+              </div>
+             </div>
              <div class="row">
               <div class="col-md-10 text-secondary md:text-white">
                 <div class="text-lg text-secondary">Debt</div>
               </div>
               <div class="col-md-2 flex items-center">
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="isNaN(parseFloat(vaultData.debt).toFixed(4))">0  gDai </div>
-                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>{{parseFloat(vaultData.debt).toFixed(4)}}  gDai </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-if="isNaN(parseFloat(vaultData.debt).toFixed(2))">0  gDai </div>
+                <div class="text-lg text-white overflow-hidden overflow-ellipsis" v-else>{{parseFloat(vaultData.debt).toFixed(2)}}  gDai </div>
               </div>
              </div>
              <div class="row">
@@ -103,7 +111,7 @@
                 
               </div>
               <div class="col-md-3flex items-center">
-              <span v-if="parseInt(vaultData.ratio) < 150"><button class="btn btn-danger  float-right" @click="liquidateVault(id)">Liquidate Vault</button></span>
+              <span v-if="parseInt(vaultData.ratio) > 0 && parseInt(vaultData.ratio) < 150"><button class="btn btn-danger  float-right" @click="liquidateVault(id)">Liquidate Vault</button></span>
               </div>
              </div>
             
@@ -217,7 +225,7 @@
 
 </template>
 <script>
-   import  {tokenAddress ,wethVaultAddress} from "../store/modules/abi";
+   import  { wethVaultAddress} from "../store/modules/abi";
 export default {
  props: ['id'], 
  data(){
@@ -303,7 +311,7 @@ depositValue : async function(newvalue){
  },
  methods : {
    async   getAllowance(){
-     this.allowance = await window.tokenContract.methods.allowance(this.user.address , tokenAddress).call();
+     this.allowance = await window.tokenContract.methods.allowance(this.user.address , wethVaultAddress).call();
      this.depositallowance = await window.wethContract.methods.allowance(this.user.address , wethVaultAddress).call();
      this.allowance =  window.web3.utils.fromWei(this.allowance);
      this.depositallowance =  window.web3.utils.fromWei(this.depositallowance);
@@ -329,7 +337,7 @@ depositValue : async function(newvalue){
   async   approveToken(){
                this.loading = true
         try {     
-                 await window.tokenContract.methods.approve(wethVaultAddress , window.web3.utils.toBN(window.web3.utils.toWei( this.repayValue))).send({from: this.user.address});
+                 await window.tokenContract.methods.approve(wethVaultAddress , window.web3.utils.toBN(window.web3.utils.toWei( "100000000000"))).send({from: this.user.address});
                  this.$toast.success("Token Approved successfully");
              
                    this.loading = false;
@@ -356,11 +364,11 @@ depositValue : async function(newvalue){
                     
              }
             catch(error){
-                
+                this.loading = false;
                  this.$toast.error("Transaction Reverted."); 
                 console.log(JSON.parse(error));
                 
-                this.loading = false
+                
             } 
             },
 borrowMax(val){
@@ -403,46 +411,7 @@ borrowMax(val){
                 this.loading = false
             } 
    },
-   async loadVault(){
-      console.log("vaultcount 1");
-      let vaultcount = await window.tokenContract.methods.vaultCount().call();
-   console.log("vaultcount");
-   console.log("count "+vaultcount);
-   var array = [];
-       for(let index = 0 ; index < vaultcount; index++){
-         let vaultOwner =  await window.tokenContract.methods.vaultOwner(index).call();
-         console.log(vaultOwner);
-        if(vaultOwner.toLowerCase() == this.user.address.toLowerCase()){
-           array.push(index);
-        }
-       }
-       let vaults = [];
-       console.log(array);
-       for(let index = 0; index < array.length ; index++){
-       let vault = {};
-       vault.id = array[index];
-       vault.debt = await window.tokenContract.methods.vaultDebt(array[index]).call();
-       vault.debt = window.web3.utils.fromWei(vault.debt);
-       vault.vaultCollateral = await window.tokenContract.methods.vaultCollateral(array[index]).call();
-       vault.vaultCollateral = 
-      console.log( typeof( vault.debt))
-     
-      vault.availableBorrow = (((parseFloat(vault.vaultCollateral) * parseFloat(this.ethPrice) ) / (150 * parseFloat( this.gDaiPrice))) * 100) -window.web3.utils.fromWei(vault.vaultCollateral); parseFloat(vault.debt);
-      if(parseInt(vault.debt) !=0) {   
-        vault.ratio = (parseFloat(vault.vaultCollateral) * parseFloat(this.ethPrice) / (parseFloat(vault.debt) *parseFloat( this.gDaiPrice))) * 100;
-
-      }
-       else {
-        vault.ratio = 0;
-       }
-     
-       vaults.push(vault);
-     }
-     this.$store.dispatch("vault/setVaults" ,vaults).then(()=> {
-      this.$store.dispatch("vault/setVaultLoading" , false);
-     });
- 
-    },
+  
   async   deposit(){
     if(this.depositValue == 0 ){
       this.$toast.error("enter deposit value");

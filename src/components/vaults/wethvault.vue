@@ -250,7 +250,7 @@ export default {
   },
    computed: {
     bnbprice : function(){
-    return this.$store.state.vault.ethPrice;
+    return this.$store.state.vault.wethPrice;
     },
     vaultLoading : function(){
     return this.$store.state.vault.vaultLoading;

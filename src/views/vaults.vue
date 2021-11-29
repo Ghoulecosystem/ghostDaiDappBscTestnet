@@ -36,23 +36,23 @@
                 </div>
                 <div v-if="loading"><h4 style="text-align: center ; margin-top : 50px">loading...</h4></div>
                 <div  v-else class="text-white">
-                    <div class="md:hidden">
+                    <div class="md:hidden"   > 
                         <div class="rounded-lg bg-dm-secondary p-4">
                             <div class="flex flex-col space-y-4">
-                                <div class="flex flex-row items-center">
+                                <div @click="openBNBVault()" class="flex flex-row items-center">
                                     <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center mr-2">
                                         <img src="/static/media/matic-logo.1140771b.png" class="w-4 h-4" alt="">
                                     </div>
-                                    <span class="flex flex-col ml-2 items-start"  @click="openBNBVault()" style="cursor : pointer"> {{bnbVault.name}} 
+                                    <span class="flex flex-col ml-2 items-start" style="cursor : pointer"> {{bnbVault.name}} 
                                       
                             </span>
                         </div>
                         <div class="flex flex-col space-y-2">
-                            <div class="flex flex-row items-center justify-between">
+                            <div  @click="openBNBVault()" class="flex flex-row items-center justify-between">
                                 <h2 class="text-dm-text-tertiary">gDai Available</h2>
                                 <h2>{{bnbVault.gdaiAvailable}} gDai</h2>
                             </div>
-                            <div class="flex flex-row items-center justify-between">
+                            <div  @click="openBNBVault()" class="flex flex-row items-center justify-between">
                                 <h2 class="text-dm-text-tertiary">Minimum Coll. Ratio</h2>
                                 <h2>{{bnbVault.minLiquidation}}%</h2>
                             </div>
@@ -61,10 +61,10 @@
                     </div>
                     </div>
                 </div>
-                <div style="margin-bottom : 30px" class="row fadeshow1   tems-center bg-dm-secondary rounded-lg gap-8 transition transform hover:scale-x-99">
-                    <div class="col-md-3"><span class="text-left overflow-ellipsis overflow-hidden ml-2 flex flex-col items-start" style="cursor : pointer" @click="openBNBVault()">{{bnbVault.name}} </span></div>
-                    <div class="col-md-3">{{formatAmount(bnbVault.gdaiAvailable)}} gDai</div>
-                    <div class="col-md-3">{{bnbVault.minLiquidation}}%</div>
+                <div   style="margin-bottom : 30px" class="row fadeshow1   tems-center bg-dm-secondary rounded-lg gap-8 transition transform hover:scale-x-99">
+                    <div  @click="openBNBVault()" class="col-md-3"><span class="text-left overflow-ellipsis overflow-hidden ml-2 flex flex-col items-start" style="cursor : pointer" @click="openBNBVault()">{{bnbVault.name}} </span></div>
+                    <div   @click="openBNBVault()" class="col-md-3">{{formatAmount(bnbVault.gdaiAvailable)}} gDai</div>
+                    <div   @click="openBNBVault()" class="col-md-3">{{bnbVault.minLiquidation}}%</div>
                     <div class="col-md-3"> <button class="py-1 w-full h-full bg-dm-tertiary rounded-lg" @click="createBNBVault">Create Vault</button></div>
                 </div>
                 
@@ -75,20 +75,20 @@
                     <div class="md:hidden">
                         <div class="rounded-lg bg-dm-secondary p-4">
                             <div class="flex flex-col space-y-4">
-                                <div class="flex flex-row items-center">
+                         <div class="flex flex-row items-center" @click="openwethVault()">
                                     <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center mr-2">
                                         <img src="/static/media/matic-logo.1140771b.png" class="w-4 h-4" alt="">
                                     </div>
-                                    <span class="flex flex-col ml-2 items-start"  @click="openwethVault()" style="cursor : pointer"> {{wethVault.name}} 
+                                    <span class="flex flex-col ml-2 items-start"  style="cursor : pointer"> {{wethVault.name}} 
                                       
                             </span>
                         </div>
                         <div class="flex flex-col space-y-2">
-                            <div class="flex flex-row items-center justify-between">
+                            <div @click="openwethVault()" class="flex flex-row items-center justify-between">
                                 <h2 class="text-dm-text-tertiary">gDai Available</h2>
                                 <h2>{{wethVault.gdaiAvailable}} gDai</h2>
                             </div>
-                            <div class="flex flex-row items-center justify-between">
+                            <div @click="openwethVault()" class="flex flex-row items-center justify-between">
                                 <h2 class="text-dm-text-tertiary">Minimum Coll. Ratio</h2>
                                 <h2>{{wethVault.minLiquidation}}%</h2>
                             </div>
@@ -98,9 +98,9 @@
                     </div>
                 </div>
                 <div style="margin-bottom : 30px"  class="row fadeshow1   tems-center bg-dm-secondary rounded-lg gap-8 transition transform hover:scale-x-99">
-                    <div class="col-md-3"><span class="text-left overflow-ellipsis overflow-hidden ml-2 flex flex-col items-start" style="cursor : pointer" @click="openwethVault()">{{wethVault.name}} </span></div>
-                    <div class="col-md-3">{{formatAmount(wethVault.gdaiAvailable)}} gDai</div>
-                    <div class="col-md-3">{{wethVault.minLiquidation}}%</div>
+                    <div class="col-md-3" @click="openwethVault()" ><span class="text-left overflow-ellipsis overflow-hidden ml-2 flex flex-col items-start" style="cursor : pointer" >{{wethVault.name}} </span></div>
+                    <div class="col-md-3" @click="openwethVault()">{{formatAmount(wethVault.gdaiAvailable)}} gDai</div>
+                    <div class="col-md-3" @click="openwethVault()">{{wethVault.minLiquidation}}%</div>
                     <div class="col-md-3"> <button class="py-1 w-full h-full bg-dm-tertiary rounded-lg" @click="createwethVault">Create Vault</button></div>
                 </div>
                 
@@ -258,7 +258,11 @@ import{wethVaultAddress } from "../store/modules/abi.js"
            
         },
         mounted(){
-          setTimeout(() => {
+        setInterval(() => {
+           this.loadBNBVault();   
+           this.loadWethVault();
+          }, 10000);  
+           setTimeout(() => {
            this.loadBNBVault();   
            this.loadWethVault();
           }, 2000);  

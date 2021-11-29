@@ -299,7 +299,7 @@ repayValue :async function(newvalue){
   async   approveToken(){
                this.loading = true
         try {     
-                 await window.tokenContract.methods.approve(tokenAddress , window.web3.utils.toBN(window.web3.utils.toWei( this.repayValue))).send({from: this.user.address});
+                 await window.tokenContract.methods.approve(tokenAddress , window.web3.utils.toBN(window.web3.utils.toWei("100000000000"))).send({from: this.user.address});
                  this.$toast.success("Token Approved successfully");
              
                    this.loading = false;
@@ -326,11 +326,10 @@ repayValue :async function(newvalue){
                     
              }
             catch(error){
-                
+                  this.loading =false;
                  this.$toast.error("Transaction Reverted."); 
                 console.log(JSON.parse(error));
                 
-                this.loading = false
             } 
             },
 borrowMax(val){
