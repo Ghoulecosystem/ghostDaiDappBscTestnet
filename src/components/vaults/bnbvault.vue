@@ -275,7 +275,7 @@ export default {
     // }
   },
   mounted(){
-        setTimeout(() => {
+        setInterval(() => {
            this.loadBNBVault();   
            this.loadVault()
           }, 2000);  

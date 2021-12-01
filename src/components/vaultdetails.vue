@@ -103,7 +103,7 @@
                 
               </div>
               <div class="col-md-3flex items-center">
-              <span v-if="parseInt(vaultData.ratio) < 150"><button class="btn btn-danger  float-right" @click="liquidateVault(id)">Liquidate Vault</button></span>
+              <span v-if="parseInt(vaultData.ratio) >0 && parseInt(vaultData.ratio) < 150"><button class="btn btn-danger  float-right" @click="liquidateVault(id)">Liquidate Vault</button></span>
               </div>
              </div>
             
@@ -233,7 +233,7 @@ export default {
       borrowValue : 0 ,
       allowance : 0,
          owner: "",
-         approve : true,
+         approve : false,
         loading: false,
      }
      //0xb95C80FaE7285EeCb5B8ad252d1af0B21d351AE7
@@ -248,6 +248,7 @@ export default {
        setTimeout(() => {
          this.getAllowance();
         this.loadData();
+
         
    },1000)
      
@@ -257,10 +258,12 @@ export default {
 repayValue :async function(newvalue){
   console.log(newvalue)
   await this.getAllowance();
-  if(parseFloat(this.allowance )> parseFloat(newvalue)){
+  if(parseFloat(this.allowance )> 1){
      this.approve = false;
+     console.log("valid allownce");
   }else{
      this.approve = true;
+      console.log("invalid allownce");
   }
 }
  },

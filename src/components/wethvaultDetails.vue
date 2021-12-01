@@ -242,8 +242,8 @@ export default {
       borrowValue : 0 ,
       allowance : 0,
       owner: "",
-      depositapprove: true,
-      approve : true,
+      depositapprove: false,
+      approve : false,
       loading: false,
       depositallowance : 0
      }
@@ -268,7 +268,7 @@ export default {
 repayValue :async function(newvalue){
   console.log(newvalue)
   await this.getAllowance();
-  if(parseFloat(this.allowance )>= parseFloat(newvalue)){
+  if(parseFloat(this.allowance )>= 1){
      this.approve = false;
   }else{
      this.approve = true;
@@ -277,7 +277,7 @@ repayValue :async function(newvalue){
 depositValue : async function(newvalue){
     console.log(newvalue)
     await this.getAllowance();
-    if(parseFloat(this.depositallowance )>= parseFloat(newvalue)){
+    if(parseFloat(this.depositallowance )>= 1){
      this.depositapprove = false;
   }else{
      this.depositapprove = true;
